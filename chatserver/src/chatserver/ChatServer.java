@@ -54,7 +54,7 @@ public class ChatServer {
 	 * threads.
 	 */
 	public static void main(String[] args) throws Exception {
-		System.out.println("The chat server is running...");
+		System.out.println("Welcome to Chatter!\nThe chat server is running...\nOpen chat-clients to continue.");
 		ServerSocket listener = new ServerSocket(PORT);
 		try {
 			while (true) {
@@ -148,21 +148,22 @@ public class ChatServer {
 				// Ignore other clients that cannot be broadcasted to.
 				while (true) {
 					String input = in.readLine();
-					
-					if(input == null ) {
+
+					if (input == null) {
 						return;
 					}
-
-					if (input.startsWith("MSG")) {
-
+					if (input.startsWith("MSG ")) {
+						//System.out.println("msg");
+						input = input.substring(4);
 					}
-					/*
-					 * if (input == null) { return; }
-					 */
-
+					if (input.startsWith("CHECK ")) {
+						//System.out.println("check");
+						input = input.substring(6);
+					}
 					for (PrintWriter writer : writers) {
 						writer.println("MESSAGE " + name + ": " + input);
 					}
+					
 				}
 			} // TODO: Handle the SocketException here to handle a client closing the socket
 			catch (IOException e) {

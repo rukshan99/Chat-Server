@@ -37,14 +37,14 @@ public class ChatClient {
 
 	BufferedReader in;
 	PrintWriter out;
-	JFrame frame = new JFrame("Chatter");
+	JFrame frame = new JFrame("Hello! Welcome to Chatter :)");
 	JTextField textField = new JTextField(40);
 	JTextArea messageArea = new JTextArea(8, 40);
 	// TODO: Add a list box
 
 	JList onlineList = new JList();
 	JCheckBox checkBox = new JCheckBox("Broadcast");
-	Boolean check;
+	Boolean check = true;
 
 	DefaultListModel listModel;
 	private static HashSet<String> selectedNames = new HashSet<>();
@@ -67,14 +67,14 @@ public class ChatClient {
 		frame.pack();
 
 		checkBox.setSelected(true);
-		frame.getContentPane().add(checkBox,"West");
+		frame.getContentPane().add(checkBox, "West");
 		frame.getContentPane().add(onlineList, "East");
 
 		// TODO: You may have to edit this event handler to handle point to point
 		// messaging,
 		// where one client can send a message to a specific client. You can add some
 		// header to
-		// the message to identify the recipient. You can get the receipient name from
+		// the message to identify the recipient. You can get the recipient name from
 		// the listbox.
 		checkBox.addActionListener(new ActionListener() {
 
@@ -93,18 +93,22 @@ public class ChatClient {
 			 * the next message.
 			 */
 			public void actionPerformed(ActionEvent e) {
-				if ( onlineList.isSelectionEmpty()) { //check ||
-					out.println("CHECK" + textField.getText());
+				if (check || onlineList.isSelectionEmpty()) { //
+					out.println("CHECK " + textField.getText());
 					textField.setText("");
 				} else {
 					ListModel model = onlineList.getModel();
 					for (int index : onlineList.getSelectedIndices()) {
 						selectedNames.add(model.getElementAt(index).toString());
 					}
-
-					for (String m : selectedNames) {
-						out.println(m);
-					}
+					/*
+					 * System.out.println(selectedNames); for (String m : selectedNames) {
+					 * out.println("xx"); }
+					 */
+					out.println("MSG " + textField.getText());
+					textField.setText("");
+					onlineList.clearSelection();
+					selectedNames.clear();
 				}
 
 				/*
@@ -153,12 +157,9 @@ public class ChatClient {
 			} else if (line.startsWith("NAMEACCEPTED")) {
 				textField.setEditable(true);
 			} else if (line.startsWith("NAME")) {
-
 				listModel.addElement(line.substring(4));
 				onlineList.setModel(listModel);
-
 			} else if (line.startsWith("NEWNAME")) {
-
 				listModel.addElement(line.substring(7));
 				onlineList.setModel(listModel);
 			} else if (line.startsWith("REMOVE")) {
@@ -166,7 +167,11 @@ public class ChatClient {
 				onlineList.setModel(listModel);
 			} else if (line.startsWith("MESSAGE")) {
 				messageArea.append(line.substring(8) + "\n");
-			}
+			} /*
+				 * else if (line.startsWith("MSG")) { messageArea.append(line.substring(4) +
+				 * "\n"); } else if (line.startsWith("CHECK")) {
+				 * messageArea.append(line.substring(6) + "\n"); }
+				 */
 		}
 	}
 
@@ -177,8 +182,6 @@ public class ChatClient {
 		ChatClient client = new ChatClient();
 		client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		client.frame.setVisible(true);
-		//client.checkBox.setVisible(true);
-		//client.onlineList.setVisible(true);
 		client.run();
 	}
 }
