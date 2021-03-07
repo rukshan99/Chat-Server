@@ -67,8 +67,8 @@ public class ChatClient {
 		frame.pack();
 
 		checkBox.setSelected(true);
-		frame.getContentPane().add(checkBox,"North");
-		frame.getContentPane().add(onlineList);
+		frame.getContentPane().add(checkBox,"West");
+		frame.getContentPane().add(onlineList, "East");
 
 		// TODO: You may have to edit this event handler to handle point to point
 		// messaging,
@@ -93,7 +93,7 @@ public class ChatClient {
 			 * the next message.
 			 */
 			public void actionPerformed(ActionEvent e) {
-				if (check ) { //|| onlineList.isSelectionEmpty()
+				if ( onlineList.isSelectionEmpty()) { //check ||
 					out.println("CHECK" + textField.getText());
 					textField.setText("");
 				} else {
